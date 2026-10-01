@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>শিক্ষা সহায়ক — Class 1–12</title>
+<meta name="description" content="শিক্ষা সহায়ক — Class 1 থেকে 12 পর্যন্ত নোট, প্রশ্নোত্তর, MCQ ও PDF রিসোর্স।">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:#f5f7fb;color:#172033}
+header{background:linear-gradient(135deg,#183b8c,#2563eb);color:#fff;padding:28px 16px;text-align:center}
+header h1{margin:0 0 8px;font-size:30px} header p{margin:0;opacity:.92}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.search{display:flex;gap:8px;margin:4px 0 20px}.search input{flex:1;padding:14px;border:1px solid #d8deea;border-radius:12px;font-size:16px}.search button{border:0;border-radius:12px;padding:0 18px;background:#173b8f;color:white}
+h2{margin:22px 0 12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.card{background:white;border:1px solid #e5e9f2;border-radius:16px;padding:18px;box-shadow:0 4px 14px #16213d0d;cursor:pointer;transition:.15s}.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px #16213d16}
+.card b{display:block;font-size:18px}.muted{color:#687386;font-size:14px}.pill{display:inline-block;background:#eaf1ff;color:#1746a2;border-radius:999px;padding:5px 9px;font-size:12px;margin-top:8px}
+.panel{background:#fff;border:1px solid #e5e9f2;border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 4px 14px #16213d0d}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tabs button{border:1px solid #d7deeb;background:#fff;border-radius:10px;padding:9px 12px;cursor:pointer}.tabs button.active{background:#173b8f;color:#fff;border-color:#173b8f}
+.item{border-top:1px solid #edf0f5;padding:14px 0}.item:first-child{border-top:0}.item h3{margin:0 0 7px}
+.notice{background:#fff8e7;border-left:4px solid #f0ad00;padding:12px;border-radius:8px;margin:12px 0}
+.quiz-q{padding:14px 0;border-top:1px solid #edf0f5}.quiz-q:first-child{border-top:0}.quiz-q label{display:block;padding:7px 0}
+footer{text-align:center;color:#6b7280;padding:30px 15px}
+.hidden{display:none!important}
+a.btn{display:inline-block;text-decoration:none;background:#173b8f;color:#fff;padding:9px 13px;border-radius:9px}
+@media(max-width:600px){header h1{font-size:25px}.wrap{padding:12px}.grid{grid-template-columns:repeat(2,1fr)}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎓 শিক্ষা সহায়ক</h1>
+  <p>Class 1–12 • Notes • প্রশ্নোত্তর • MCQ • PDF</p>
+</header>
+<main class="wrap">
+  <div class="search">
+    <input id="search" placeholder="ক্লাস, বিষয়, অধ্যায় বা রিসোর্স খুঁজুন…" oninput="searchAll()">
+    <button onclick="searchAll()">খুঁজুন</button>
+  </div>
+
+  <section id="home">
+    <h2>📚 শ্রেণি নির্বাচন করুন</h2>
+    <div id="classes" class="grid"></div>
+
+    <div class="panel">
+      <h2>⚡ দ্রুত রিসোর্স</h2>
+      <div class="tabs">
+        <button class="active" onclick="showQuick('notes',this)">নোট</button>
+        <button onclick="showQuick('qa',this)">প্রশ্নোত্তর</button>
+        <button onclick="showQuick('mcq',this)">MCQ</button>
+        <button onclick="showQuick('pdf',this)">PDF</button>
+      </div>
+      <div id="quick"></div>
+    </div>
+
+    <div class="panel">
+      <h2>🧠 অনলাইন কুইজ</h2>
+      <p class="muted">নিচের নমুনা কুইজটি চেষ্টা করুন।</p>
+      <div id="quiz"></div>
+      <button class="a btn" onclick="checkQuiz()">ফলাফল দেখুন</button>
+      <div id="result" class="notice hidden"></div>
+    </div>
+  </section>
+
+  <section id="classView" class="hidden">
+    <button onclick="goHome()">← সব ক্লাস</button>
+    <div class="panel">
+      <h2 id="classTitle"></h2>
+      <p class="muted">একটি বিষয় নির্বাচন করুন।</p>
+      <div id="subjects" class="grid"></div>
+    </div>
+    <div id="subjectPanel" class="panel hidden"></div>
+  </section>
+
+  <section id="searchView" class="hidden">
+    <button onclick="goHome()">← হোম</button>
+    <div class="panel"><h2>🔎 সার্চ ফলাফল</h2><div id="results"></div></div>
+  </section>
+</main>
+<footer>© 2026 শিক্ষা সহায়ক • শিক্ষামূলক ব্যবহারের জন্য</footer>
+
+<script>
+const subjects = {
+  1:["বাংলা","ইংরেজি","গণিত","পরিবেশ"],
+  2:["বাংলা","ইংরেজি","গণিত","পরিবেশ"],
+  3:["বাংলা","ইংরেজি","গণিত","পরিবেশ"],
+  4:["বাংলা","ইংরেজি","গণিত","বিজ্ঞান","সমাজ"],
+  5:["বাংলা","ইংরেজি","গণিত","বিজ্ঞান","সমাজ"],
+  6:["বাংলা","ইংরেজি","গণিত","বিজ্ঞান","ইতিহাস","ভূগোল"],
+  7:["বাংলা","ইংরেজি","গণিত","বিজ্ঞান","ইতিহাস","ভূগোল"],
+  8:["বাংলা","ইংরেজি","গণিত","বিজ্ঞান","ইতিহাস","ভূগোল"],
+  9:["বাংলা","ইংরেজি","গণিত","ভৌতবিজ্ঞান","জীবনবিজ্ঞান","ইতিহাস","ভূগোল"],
+  10:["বাংলা","ইংরেজি","গণিত","ভৌতবিজ্ঞান","জীবনবিজ্ঞান","ইতিহাস","ভূগোল"],
+  11:["বাংলা","ইংরেজি","গণিত","পদার্থবিদ্যা","রসায়ন","জীববিদ্যা"],
+  12:["বাংলা","ইংরেজি","গণিত","পদার্থবিদ্যা","রসায়ন","জীববিদ্যা"]
+};
+
+const data = [
+ {type:"notes",cls:10,sub:"গণিত",title:"বাস্তব সংখ্যা — সংক্ষিপ্ত নোট",text:"গ.সা.গু, ল.সা.গু, মৌলিক সংখ্যা ও ইউক্লিডীয় পদ্ধতির মূল ধারণা এখানে যোগ করুন।"},
+ {type:"qa",cls:10,sub:"ইতিহাস",title:"ইতিহাসের গুরুত্বপূর্ণ প্রশ্ন",text:"অধ্যায়ভিত্তিক প্রশ্ন ও উত্তর এখানে লিখুন।"},
+ {type:"mcq",cls:10,sub:"বিজ্ঞান",title:"বিজ্ঞান MCQ",text:"নমুনা প্রশ্ন: উদ্ভিদের খাদ্য তৈরির প্রক্রিয়ার নাম কী?",options:["শ্বসন","সালোকসংশ্লেষ","পরিপাক","নিঃসরণ"],answer:1},
+ {type:"pdf",cls:10,sub:"বাংলা",title:"মডেল প্রশ্নপত্র",text:"এখানে আপনার PDF-এর লিংক বসাতে পারবেন।",url:"#"}
+];
+
+const clsEl=document.getElementById("classes");
+for(let i=1;i<=12;i++){
+  clsEl.innerHTML += `<div class="card" onclick="openClass(${i})"><b>Class ${i}</b><span class="muted">${subjects[i].length}টি বিষয়</span><span class="pill">দেখুন →</span></div>`;
+}
+
+function openClass(c){
+  home.classList.add("hidden"); searchView.classList.add("hidden"); classView.classList.remove("hidden");
+  classTitle.textContent=`Class ${c}`;
+  subjectsEl=document.getElementById("subjects"); subjectsEl.innerHTML="";
+  subjects[c].forEach(s=>subjectsEl.innerHTML+=`<div class="card" onclick="openSubject(${c},'${s}')"><b>${s}</b><span class="pill">অধ্যায় দেখুন →</span></div>`);
+  subjectPanel.classList.add("hidden");
+}
+function openSubject(c,s){
+  subjectPanel.classList.remove("hidden");
+  const items=data.filter(x=>x.cls===c&&x.sub===s);
+  let html=`<h2>📖 ${s}</h2><div class="notice">এখানে আপনার অধ্যায়, নোট, প্রশ্নোত্তর, MCQ ও PDF যোগ করা যাবে।</div>`;
+  if(items.length) items.forEach(x=>html+=renderItem(x)); else html+=`<p class="muted">এই বিষয়ের কনটেন্ট এখনো যোগ করা হয়নি।</p>`;
+  subjectPanel.innerHTML=html;
+}
+function renderItem(x){
+  if(x.type==="pdf") return `<div class="item"><h3>📄 ${x.title}</h3><p>${x.text}</p><a class="btn" href="${x.url}" target="_blank">PDF খুলুন</a></div>`;
+  if(x.type==="mcq") return `<div class="item"><h3>❓ ${x.title}</h3><p>${x.text}</p><p class="muted">${x.options.map((o,i)=>`${String.fromCharCode(65+i)}. ${o}`).join(" &nbsp; ")}</p></div>`;
+  return `<div class="item"><h3>${x.type==="notes"?"📝":"❔"} ${x.title}</h3><p>${x.text}</p></div>`;
+}
+function showQuick(t,btn){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+  quick.innerHTML=data.filter(x=>x.type===t).map(renderItem).join("") || `<p class="muted">এখনো কোনো কনটেন্ট যোগ করা হয়নি।</p>`;
+}
+showQuick("notes",document.querySelector(".tabs button"));
+
+function goHome(){classView.classList.add("hidden");searchView.classList.add("hidden");home.classList.remove("hidden")}
+function searchAll(){
+  const q=search.value.trim().toLowerCase();
+  if(!q){goHome();return}
+  home.classList.add("hidden");classView.classList.add("hidden");searchView.classList.remove("hidden");
+  const out=data.filter(x=>JSON.stringify(x).toLowerCase().includes(q));
+  results.innerHTML=out.length?out.map(renderItem).join(""):`<p>“${search.value}” এর জন্য কোনো ফলাফল পাওয়া যায়নি।`;
+}
+const quizData=[{q:"2 + 2 = ?",o:["3","4","5"],a:1},{q:"বাংলা ভাষার বর্ণমালার একটি স্বরবর্ণ কোনটি?",o:["ক","অ","ম"],a:1}];
+quiz.innerHTML=quizData.map((x,i)=>`<div class="quiz-q"><b>${i+1}. ${x.q}</b>${x.o.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${o}</label>`).join("")}</div>`).join("");
+function checkQuiz(){
+ let score=0;quizData.forEach((x,i)=>{let v=document.querySelector(`input[name=q${i}]:checked`);if(v&&+v.value===x.a)score++});
+ result.classList.remove("hidden");result.textContent=`আপনার ফলাফল: ${score}/${quizData.length}`;
+}
+</script>
+</body>
+</html>
