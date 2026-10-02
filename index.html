@@ -231,5 +231,51 @@ function checkQuiz(){
 
   console.log("Firebase Authentication connected:", auth);
   </script>
+  <!-- Dashboard -->
+<div id="dashboard" style="display:none;">
+
+  <h1>📚 শিক্ষা সহায়ক</h1>
+
+  <p>আপনার শিক্ষা সহায়ক ড্যাশবোর্ডে স্বাগতম।</p>
+
+  <hr>
+
+  <h2>📖 বিষয়সমূহ</h2>
+
+  <button>বাংলা</button>
+  <button>ইংরেজি</button>
+  <button>গণিত</button>
+  <button>বিজ্ঞান</button>
+
+  <h2>📝 নোট</h2>
+  <p>এখানে আপনার পড়াশোনার নোট থাকবে।</p>
+
+  <h2>❓ প্রশ্নোত্তর</h2>
+  <p>শিক্ষামূলক প্রশ্ন ও উত্তর এখানে থাকবে।</p>
+
+  <button id="dashboardLogout">🚪 Logout</button>
+
+</div>
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  import { signOut, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+  const dashboard = document.getElementById("dashboard");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dashboard.style.display = "block";
+    } else {
+      dashboard.style.display = "none";
+    }
+  });
+
+  document.getElementById("dashboardLogout").onclick = () => {
+    signOut(auth);
+  };
+</script>
+  
 </body>
 </html>
