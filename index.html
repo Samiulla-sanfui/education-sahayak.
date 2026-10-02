@@ -3,6 +3,87 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শিক্ষা সহায়ক</title>
+</head>
+<body>
+
+  <h1>শিক্ষা সহায়ক</h1>
+  <p>আপনার শিক্ষার সহায়ক প্ল্যাটফর্ম</p>
+
+  <h2>Login / Signup</h2>
+
+  <input type="email" id="email" placeholder="Email">
+  <br><br>
+
+  <input type="password" id="password" placeholder="Password">
+  <br><br>
+
+  <button id="signupBtn">Sign Up</button>
+  <button id="loginBtn">Login</button>
+  <button id="logoutBtn" style="display:none;">Logout</button>
+
+  <p id="message"></p>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+
+    import {
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const message = document.getElementById("message");
+
+    signupBtn.onclick = async () => {
+      try {
+        await createUserWithEmailAndPassword(
+          auth,
+          email.value,
+          password.value
+        );
+        message.textContent = "Signup সফল হয়েছে!";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    };
+
+    loginBtn.onclick = async () => {
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          email.value,
+          password.value
+        );
+        message.textContent = "Login সফল হয়েছে!";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    };
+
+    logoutBtn.onclick = () => signOut(auth);
+
+    onAuthStateChanged(auth, (user) => {
+      logoutBtn.style.display = user ? "block" : "none";
+      signupBtn.style.display = user ? "none" : "inline-block";
+      loginBtn.style.display = user ? "none" : "inline-block";
+
+      if (user) {
+        message.textContent = "Login হয়েছে: " + user.email;
+      }
+    });
+  </script>
+
+</body>
+</html>
 <title>শিক্ষা সহায়ক — Class 1–12</title>
 <meta name="description" content="শিক্ষা সহায়ক — Class 1 থেকে 12 পর্যন্ত নোট, প্রশ্নোত্তর, MCQ ও PDF রিসোর্স।">
 <style>
@@ -145,5 +226,10 @@ function checkQuiz(){
  result.classList.remove("hidden");result.textContent=`আপনার ফলাফল: ${score}/${quizData.length}`;
 }
 </script>
+  <script type="module">
+  import { auth } from "./firebase.js";
+
+  console.log("Firebase Authentication connected:", auth);
+  </script>
 </body>
 </html>
