@@ -1,1 +1,519 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শিক্ষা সহায়ক — Admin Panel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    header {
+      background: #0f766e;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 25px auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #0f766e;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #0f766e;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .logout {
+      background: #dc2626;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #message {
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background: #ecfdf5;
+      color: #166534;
+      display: none;
+    }
+
+    .post {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 12px;
+    }
+
+    .post h3 {
+      margin: 0 0 8px;
+      color: #0f766e;
+    }
+
+    .delete {
+      background: #dc2626;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📚 শিক্ষা সহায়ক</h1>
+  <p>Admin Panel</p>
+</header>
+
+<div class="container">
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="card">
+    <h2>🔐 Admin Login</h2>
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin Email"
+    >
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
+
+    <button id="loginBtn">Login</button>
+  </div>
+
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+
+    <div class="card">
+      <h2>📊 Admin Dashboard</h2>
+
+      <p>
+        স্বাগতম, Admin 👋
+      </p>
+
+      <button id="logoutBtn" class="logout">
+        🚪 Logout
+      </button>
+    </div>
+
+
+    <!-- ADD POST -->
+    <div class="card">
+
+      <h2>➕ নতুন পোস্ট যোগ করুন</h2>
+
+      <label>Class</label>
+
+      <select id="className">
+        <option value="">Class নির্বাচন করুন</option>
+        <option>Class 1</option>
+        <option>Class 2</option>
+        <option>Class 3</option>
+        <option>Class 4</option>
+        <option>Class 5</option>
+        <option>Class 6</option>
+        <option>Class 7</option>
+        <option>Class 8</option>
+        <option>Class 9</option>
+        <option>Class 10</option>
+        <option>Class 11</option>
+        <option>Class 12</option>
+      </select>
+
+      <label>Subject</label>
+
+      <input
+        type="text"
+        id="subject"
+        placeholder="যেমন: বাংলা"
+      >
+
+      <label>Chapter</label>
+
+      <input
+        type="text"
+        id="chapter"
+        placeholder="অধ্যায়ের নাম"
+      >
+
+      <label>Title</label>
+
+      <input
+        type="text"
+        id="title"
+        placeholder="পোস্টের শিরোনাম"
+      >
+
+      <label>Notes</label>
+
+      <textarea
+        id="notes"
+        placeholder="এখানে নোট লিখুন..."
+      ></textarea>
+
+      <label>Question & Answer</label>
+
+      <textarea
+        id="qa"
+        placeholder="প্রশ্ন ও উত্তর লিখুন..."
+      ></textarea>
+
+      <label>MCQ</label>
+
+      <textarea
+        id="mcq"
+        placeholder="MCQ প্রশ্ন ও উত্তর লিখুন..."
+      ></textarea>
+
+      <label>PDF Link</label>
+
+      <input
+        type="url"
+        id="pdf"
+        placeholder="PDF-এর লিংক"
+      >
+
+      <button id="publishBtn">
+        🚀 Publish Post
+      </button>
+
+    </div>
+
+
+    <!-- POSTS -->
+    <div class="card">
+
+      <h2>📚 প্রকাশিত পোস্ট</h2>
+
+      <div id="posts">
+        পোস্ট লোড হচ্ছে...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="message"></div>
+
+
+<script type="module">
+
+  import { auth, db } from "./firebase.js";
+
+  import {
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+  import {
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+  const ADMIN_EMAIL = "sanfuisamiullah@gmail.com";
+
+
+  const loginBox = document.getElementById("loginBox");
+  const dashboard = document.getElementById("dashboard");
+
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const publishBtn = document.getElementById("publishBtn");
+
+  const postsBox = document.getElementById("posts");
+
+
+  function showMessage(text) {
+
+    const message = document.getElementById("message");
+
+    message.innerText = text;
+    message.style.display = "block";
+
+    setTimeout(() => {
+      message.style.display = "none";
+    }, 3000);
+  }
+
+
+  // LOGIN
+
+  loginBtn.addEventListener("click", async () => {
+
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
+
+    if (!userEmail || !userPassword) {
+      alert("Email এবং Password দিন");
+      return;
+    }
+
+    try {
+
+      const result =
+        await signInWithEmailAndPassword(
+          auth,
+          userEmail,
+          userPassword
+        );
+
+      if (result.user.email !== ADMIN_EMAIL) {
+
+        await signOut(auth);
+
+        alert("এই অ্যাকাউন্ট Admin নয়");
+
+        return;
+      }
+
+      showMessage("Login সফল হয়েছে ✅");
+
+    } catch (error) {
+
+      alert("Login ব্যর্থ: " + error.message);
+
+    }
+
+  });
+
+
+  // LOGOUT
+
+  logoutBtn.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+  });
+
+
+  // AUTH STATUS
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (user && user.email === ADMIN_EMAIL) {
+
+      loginBox.classList.add("hidden");
+
+      dashboard.classList.remove("hidden");
+
+      loadPosts();
+
+    } else {
+
+      loginBox.classList.remove("hidden");
+
+      dashboard.classList.add("hidden");
+
+    }
+
+  });
+
+
+  // PUBLISH POST
+
+  publishBtn.addEventListener("click", async () => {
+
+    const className =
+      document.getElementById("className").value;
+
+    const subject =
+      document.getElementById("subject").value.trim();
+
+    const chapter =
+      document.getElementById("chapter").value.trim();
+
+    const title =
+      document.getElementById("title").value.trim();
+
+    const notes =
+      document.getElementById("notes").value.trim();
+
+    const qa =
+      document.getElementById("qa").value.trim();
+
+    const mcq =
+      document.getElementById("mcq").value.trim();
+
+    const pdf =
+      document.getElementById("pdf").value.trim();
+
+
+    if (!className || !subject || !title) {
+
+      alert(
+        "Class, Subject এবং Title অবশ্যই দিতে হবে।"
+      );
+
+      return;
+    }
+
+
+    try {
+
+      await addDoc(
+        collection(db, "posts"),
+        {
+
+          className: className,
+
+          subject: subject,
+
+          chapter: chapter,
+
+          title: title,
+
+          notes: notes,
+
+          qa: qa,
+
+          mcq: mcq,
+
+          pdf: pdf,
+
+          createdAt: serverTimestamp()
+
+        }
+      );
+
+
+      showMessage("পোস্ট সফলভাবে Publish হয়েছে ✅");
+
+
+      document.getElementById("className").value = "";
+      document.getElementById("subject").value = "";
+      document.getElementById("chapter").value = "";
+      document.getElementById("title").value = "";
+      document.getElementById("notes").value = "";
+      document.getElementById("qa").value = "";
+      document.getElementById("mcq").value = "";
+      document.getElementById("pdf").value = "";
+
+
+      loadPosts();
+
+
+    } catch (error) {
+
+      alert(
+        "Post Publish করা যায়নি: " +
+        error.message
+      );
+
+    }
+
+  });
+
+
+  // LOAD POSTS
+
+  async function loadPosts() {
+
+    postsBox.innerHTML = "পোস্ট লোড হচ্ছে...";
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "posts")
+        );
+
+
+      if (snapshot.empty) {
+
+        postsBox.innerHTML =
+          "এখনও কোনো পোস্ট নেই।";
+
+        return;
+      }
+
+
+      postsBox.innerHTML = "";
+
+
+      snapshot.forEach((item) => {
+
+        const data = item.data();
+
+
+        const div =
+          document.createElement("div");
+
+        div.className = "post";
+
+
+        div.innerHTML = `
+
+          <h3>${data.title ||
