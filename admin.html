@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>শিক্ষা সহায়ক — Admin Panel</title>
+  <title>শিক্ষা সহায়ক - Admin Panel</title>
 
   <style>
     * {
@@ -14,58 +13,49 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      color: #1e293b;
-    }
-
-    header {
-      background: #0f766e;
-      color: white;
-      padding: 18px;
-      text-align: center;
+      background: #f3f6fb;
+      color: #222;
     }
 
     .container {
-      max-width: 700px;
+      width: 94%;
+      max-width: 900px;
       margin: 25px auto;
-      padding: 15px;
     }
 
     .card {
       background: white;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
       margin-bottom: 20px;
     }
 
-    h2 {
-      margin-top: 0;
-      color: #0f766e;
+    h1, h2 {
+      text-align: center;
+      color: #1769aa;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       padding: 12px;
       margin: 7px 0 14px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 15px;
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 130px;
       resize: vertical;
     }
 
     button {
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       border: 0;
       border-radius: 8px;
-      background: #0f766e;
+      background: #1769aa;
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -77,81 +67,77 @@
     }
 
     .logout {
-      background: #dc2626;
+      background: #d32f2f;
     }
 
     .hidden {
       display: none;
     }
 
-    #message {
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      background: #ecfdf5;
-      color: #166534;
-      display: none;
-    }
-
     .post {
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      border: 1px solid #ddd;
       padding: 15px;
+      border-radius: 10px;
       margin-top: 12px;
     }
 
     .post h3 {
-      margin: 0 0 8px;
-      color: #0f766e;
+      margin-top: 0;
+      color: #1769aa;
     }
 
     .delete {
-      background: #dc2626;
-      margin-top: 10px;
+      background: #d32f2f;
+    }
+
+    .edit {
+      background: #ef8b00;
+      margin-bottom: 5px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 5px;
+    }
+
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin: 10px 0;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>📚 শিক্ষা সহায়ক</h1>
-  <p>Admin Panel</p>
-</header>
-
 <div class="container">
 
   <!-- LOGIN -->
   <div id="loginBox" class="card">
+    <h1>📚 শিক্ষা সহায়ক</h1>
     <h2>🔐 Admin Login</h2>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Admin Email"
-    >
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Password"
-    >
+    <input type="email" id="email" placeholder="Admin Email">
+    <input type="password" id="password" placeholder="Password">
 
     <button id="loginBtn">Login</button>
+
+    <p id="message"></p>
   </div>
 
 
-  <!-- DASHBOARD -->
+  <!-- ADMIN DASHBOARD -->
   <div id="dashboard" class="hidden">
 
     <div class="card">
-      <h2>📊 Admin Dashboard</h2>
+      <h1>📚 Admin Dashboard</h1>
 
       <p>
-        স্বাগতম, Admin 👋
+        স্বাগতম, <b id="adminEmail"></b>
       </p>
 
-      <button id="logoutBtn" class="logout">
+      <button class="logout" id="logoutBtn">
         🚪 Logout
       </button>
     </div>
@@ -163,7 +149,6 @@
       <h2>➕ নতুন পোস্ট যোগ করুন</h2>
 
       <label>Class</label>
-
       <select id="className">
         <option value="">Class নির্বাচন করুন</option>
         <option>Class 1</option>
@@ -180,62 +165,65 @@
         <option>Class 12</option>
       </select>
 
-      <label>Subject</label>
 
+      <label>Subject</label>
       <input
         type="text"
         id="subject"
-        placeholder="যেমন: বাংলা"
+        placeholder="যেমন: বাংলা / ইংরেজি / গণিত"
       >
 
-      <label>Chapter</label>
 
+      <label>Chapter</label>
       <input
         type="text"
         id="chapter"
-        placeholder="অধ্যায়ের নাম"
+        placeholder="Chapter-এর নাম"
       >
 
-      <label>Title</label>
 
+      <label>Title</label>
       <input
         type="text"
         id="title"
         placeholder="পোস্টের শিরোনাম"
       >
 
-      <label>Notes</label>
 
+      <label>Notes</label>
       <textarea
         id="notes"
-        placeholder="এখানে নোট লিখুন..."
+        placeholder="এখানে শিক্ষামূলক নোট লিখুন..."
       ></textarea>
 
-      <label>Question & Answer</label>
 
+      <label>Q&A</label>
       <textarea
         id="qa"
         placeholder="প্রশ্ন ও উত্তর লিখুন..."
       ></textarea>
 
-      <label>MCQ</label>
 
+      <label>MCQ</label>
       <textarea
         id="mcq"
         placeholder="MCQ প্রশ্ন ও উত্তর লিখুন..."
       ></textarea>
 
-      <label>PDF Link</label>
 
+      <label>PDF Link (যদি থাকে)</label>
       <input
         type="url"
         id="pdf"
-        placeholder="PDF-এর লিংক"
+        placeholder="PDF Link"
       >
+
 
       <button id="publishBtn">
         🚀 Publish Post
       </button>
+
+      <p id="postMessage"></p>
 
     </div>
 
@@ -256,9 +244,6 @@
 </div>
 
 
-<div id="message"></div>
-
-
 <script type="module">
 
   import { auth, db } from "./firebase.js";
@@ -275,12 +260,21 @@
     getDocs,
     deleteDoc,
     doc,
+    updateDoc,
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
+  // =========================
+  // ADMIN EMAIL
+  // =========================
+
   const ADMIN_EMAIL = "sanfuisamiullah@gmail.com";
 
+
+  // =========================
+  // ELEMENTS
+  // =========================
 
   const loginBox = document.getElementById("loginBox");
   const dashboard = document.getElementById("dashboard");
@@ -291,25 +285,18 @@
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
+  const message = document.getElementById("message");
+  const adminEmail = document.getElementById("adminEmail");
+
   const publishBtn = document.getElementById("publishBtn");
+  const postMessage = document.getElementById("postMessage");
 
-  const postsBox = document.getElementById("posts");
-
-
-  function showMessage(text) {
-
-    const message = document.getElementById("message");
-
-    message.innerText = text;
-    message.style.display = "block";
-
-    setTimeout(() => {
-      message.style.display = "none";
-    }, 3000);
-  }
+  const postsDiv = document.getElementById("posts");
 
 
+  // =========================
   // LOGIN
+  // =========================
 
   loginBtn.addEventListener("click", async () => {
 
@@ -317,40 +304,68 @@
     const userPassword = password.value;
 
     if (!userEmail || !userPassword) {
-      alert("Email এবং Password দিন");
+      message.textContent = "Email এবং Password দিন।";
       return;
     }
 
     try {
 
-      const result =
-        await signInWithEmailAndPassword(
-          auth,
-          userEmail,
-          userPassword
-        );
+      const result = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        userPassword
+      );
 
       if (result.user.email !== ADMIN_EMAIL) {
 
         await signOut(auth);
 
-        alert("এই অ্যাকাউন্ট Admin নয়");
+        message.textContent =
+          "❌ এই অ্যাকাউন্টের Admin access নেই।";
 
         return;
       }
 
-      showMessage("Login সফল হয়েছে ✅");
+      message.textContent = "Login সফল হয়েছে।";
 
     } catch (error) {
 
-      alert("Login ব্যর্থ: " + error.message);
+      message.textContent =
+        "❌ Login ব্যর্থ: " + error.message;
 
     }
 
   });
 
 
+  // =========================
+  // AUTH STATE
+  // =========================
+
+  onAuthStateChanged(auth, async (user) => {
+
+    if (user && user.email === ADMIN_EMAIL) {
+
+      loginBox.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+
+      adminEmail.textContent = user.email;
+
+      loadPosts();
+
+    } else {
+
+      loginBox.classList.remove("hidden");
+      dashboard.classList.add("hidden");
+
+    }
+
+  });
+
+
+  // =========================
   // LOGOUT
+  // =========================
 
   logoutBtn.addEventListener("click", async () => {
 
@@ -359,30 +374,9 @@
   });
 
 
-  // AUTH STATUS
-
-  onAuthStateChanged(auth, async (user) => {
-
-    if (user && user.email === ADMIN_EMAIL) {
-
-      loginBox.classList.add("hidden");
-
-      dashboard.classList.remove("hidden");
-
-      loadPosts();
-
-    } else {
-
-      loginBox.classList.remove("hidden");
-
-      dashboard.classList.add("hidden");
-
-    }
-
-  });
-
-
+  // =========================
   // PUBLISH POST
+  // =========================
 
   publishBtn.addEventListener("click", async () => {
 
@@ -413,11 +407,11 @@
 
     if (!className || !subject || !title) {
 
-      alert(
-        "Class, Subject এবং Title অবশ্যই দিতে হবে।"
-      );
+      postMessage.textContent =
+        "⚠️ Class, Subject এবং Title অবশ্যই দিতে হবে।";
 
       return;
+
     }
 
 
@@ -426,31 +420,24 @@
       await addDoc(
         collection(db, "posts"),
         {
-
           className: className,
-
           subject: subject,
-
           chapter: chapter,
-
           title: title,
-
           notes: notes,
-
           qa: qa,
-
           mcq: mcq,
-
           pdf: pdf,
-
           createdAt: serverTimestamp()
-
         }
       );
 
 
-      showMessage("পোস্ট সফলভাবে Publish হয়েছে ✅");
+      postMessage.textContent =
+        "✅ পোস্ট সফলভাবে Publish হয়েছে।";
 
+
+      // FORM CLEAR
 
       document.getElementById("className").value = "";
       document.getElementById("subject").value = "";
@@ -467,53 +454,170 @@
 
     } catch (error) {
 
-      alert(
-        "Post Publish করা যায়নি: " +
-        error.message
-      );
+      postMessage.textContent =
+        "❌ পোস্ট Publish করা যায়নি: " + error.message;
 
     }
 
   });
 
 
+  // =========================
   // LOAD POSTS
+  // =========================
 
   async function loadPosts() {
 
-    postsBox.innerHTML = "পোস্ট লোড হচ্ছে...";
+    postsDiv.innerHTML = "লোড হচ্ছে...";
 
     try {
 
       const snapshot =
-        await getDocs(
-          collection(db, "posts")
-        );
+        await getDocs(collection(db, "posts"));
+
+      postsDiv.innerHTML = "";
 
 
       if (snapshot.empty) {
 
-        postsBox.innerHTML =
-          "এখনও কোনো পোস্ট নেই।";
+        postsDiv.innerHTML =
+          "<p>এখনও কোনো পোস্ট নেই।</p>";
 
         return;
+
       }
-
-
-      postsBox.innerHTML = "";
 
 
       snapshot.forEach((item) => {
 
         const data = item.data();
 
+        const post = document.createElement("div");
 
-        const div =
-          document.createElement("div");
+        post.className = "post";
 
-        div.className = "post";
+        post.innerHTML = `
+
+          <h3>${escapeHtml(data.title || "")}</h3>
+
+          <p>
+            <b>Class:</b>
+            ${escapeHtml(data.className || "")}
+          </p>
+
+          <p>
+            <b>Subject:</b>
+            ${escapeHtml(data.subject || "")}
+          </p>
+
+          <p>
+            <b>Chapter:</b>
+            ${escapeHtml(data.chapter || "")}
+          </p>
+
+          <hr>
+
+          <p>
+            <b>Notes:</b><br>
+            ${escapeHtml(data.notes || "").replace(/\n/g, "<br>")}
+          </p>
+
+          <p>
+            <b>Q&A:</b><br>
+            ${escapeHtml(data.qa || "").replace(/\n/g, "<br>")}
+          </p>
+
+          <p>
+            <b>MCQ:</b><br>
+            ${escapeHtml(data.mcq || "").replace(/\n/g, "<br>")}
+          </p>
+
+          ${
+            data.pdf
+              ? `<p><b>PDF:</b>
+                 <a href="${escapeHtml(data.pdf)}"
+                    target="_blank">
+                    📄 PDF দেখুন
+                 </a>
+                 </p>`
+              : ""
+          }
+
+          <button
+            class="delete"
+            data-id="${item.id}">
+            🗑️ Delete
+          </button>
+
+        `;
 
 
-        div.innerHTML = `
+        const deleteButton =
+          post.querySelector(".delete");
 
-          <h3>${data.title ||
+
+        deleteButton.addEventListener(
+          "click",
+          async () => {
+
+            const confirmDelete =
+              confirm("এই পোস্টটি Delete করতে চান?");
+
+            if (!confirmDelete) return;
+
+
+            try {
+
+              await deleteDoc(
+                doc(db, "posts", item.id)
+              );
+
+              loadPosts();
+
+            } catch (error) {
+
+              alert(
+                "Delete করা যায়নি: " +
+                error.message
+              );
+
+            }
+
+          }
+        );
+
+
+        postsDiv.appendChild(post);
+
+      });
+
+
+    } catch (error) {
+
+      postsDiv.innerHTML =
+        "❌ পোস্ট লোড করা যায়নি: " +
+        error.message;
+
+    }
+
+  }
+
+
+  // =========================
+  // SECURITY
+  // =========================
+
+  function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+  }
+
+</script>
+
+</body>
+</html>
