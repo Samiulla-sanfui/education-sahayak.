@@ -3,1234 +3,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>শিক্ষা সহায়ক - Admin Panel</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f3f6fb;
-  color:#222;
-}
-
-.container{
-  width:94%;
-  max-width:900px;
-  margin:25px auto;
-}
-
-.card{
-  background:#fff;
-  padding:22px;
-  border-radius:15px;
-  box-shadow:0 4px 18px rgba(0,0,0,.08);
-  margin-bottom:20px;
-}
-
-h1,h2{
-  text-align:center;
-  color:#1769aa;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:12px;
-  margin:7px 0 14px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  font-size:15px;
-}
-
-textarea{
-  min-height:130px;
-  resize:vertical;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  border:0;
-  border-radius:8px;
-  background:#1769aa;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  margin-top:5px;
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6fb;color:#222}
+.container{width:94%;max-width:900px;margin:25px auto}
+.card{background:#fff;padding:22px;border-radius:15px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:20px}
+h1,h2{text-align:center;color:#1769aa}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccc;border-radius:8px;font-size:15px}
+textarea{min-height:130px;resize:vertical}
+button{width:100%;padding:12px;border:0;border-radius:8px;background:#1769aa;color:white;font-size:16px;cursor:pointer;margin-top:5px}
 button:hover{opacity:.9}
-
-.logout{background:#d32f2f}
-.delete{background:#d32f2f}
+.logout,.delete,.reject{background:#d32f2f}
 .edit{background:#ef8b00}
-.addTutor{background:#188038}
-
+.addTutor,.approve{background:#188038}
 .hidden{display:none}
-
-.post,.tutor{
-  border:1px solid #ddd;
-  padding:15px;
-  border-radius:10px;
-  margin-top:12px;
-}
-
-.post h3{
-  margin-top:0;
-  color:#1769aa;
-}
-
-.tutor{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.tutor button{
-  width:auto;
-  padding:8px 12px;
-  background:#d32f2f;
-}
-
-label{
-  font-weight:bold;
-  display:block;
-  margin-top:5px;
-}
-
-#message,#postMessage,#tutorMessage{
-  text-align:center;
-  font-weight:bold;
-  margin:10px 0;
-}
-
-.adminBadge{
-  background:#1769aa;
-  color:white;
-  padding:5px 10px;
-  border-radius:20px;
-  display:inline-block;
-}
-
-.tutorBadge{
-  background:#188038;
-  color:white;
-  padding:5px 10px;
-  border-radius:20px;
-  display:inline-block;
-}
+.post,.tutor{border:1px solid #ddd;padding:15px;border-radius:10px;margin-top:12px}
+.post h3{margin-top:0;color:#1769aa}
+.tutor{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tutor button{width:auto;padding:8px 12px}
+label{font-weight:bold;display:block;margin-top:5px}
+#message,#postMessage,#tutorMessage{ text-align:center;font-weight:bold;margin:10px 0}
+.adminBadge{background:#1769aa;color:white;padding:5px 10px;border-radius:20px;display:inline-block}
+.tutorBadge{background:#188038;color:white;padding:5px 10px;border-radius:20px;display:inline-block}
+.pendingBadge{background:#ef8b00;color:white;padding:5px 10px;border-radius:20px;display:inline-block}
+.approvedBadge{background:#188038;color:white;padding:5px 10px;border-radius:20px;display:inline-block}
+.postActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.postActions button{width:auto;flex:1;min-width:120px}
+.small{font-size:13px;color:#666}
 </style>
 </head>
-
 <body>
-
 <div class="container">
 
-<!-- ================= LOGIN ================= -->
-
 <div id="loginBox" class="card">
-
 <h1>📚 শিক্ষা সহায়ক</h1>
-
 <h2>🔐 Login</h2>
-
-<input
-type="email"
-id="email"
-placeholder="Email"
-autocomplete="username"
->
-
-<input
-type="password"
-id="password"
-placeholder="Password"
-autocomplete="current-password"
->
-
-<button id="loginBtn">
-Login
-</button>
-
+<input type="email" id="email" placeholder="Email" autocomplete="username">
+<input type="password" id="password" placeholder="Password" autocomplete="current-password">
+<button id="loginBtn">Login</button>
 <p id="message"></p>
-
 </div>
-
-
-<!-- ================= DASHBOARD ================= -->
 
 <div id="dashboard" class="hidden">
 
 <div class="card">
-
 <h1>📚 Admin Dashboard</h1>
-
-<p>
-স্বাগতম,
-<b id="adminEmail"></b>
-</p>
-
+<p>স্বাগতম, <b id="adminEmail"></b></p>
 <p id="userRole"></p>
-
-<button class="logout" id="logoutBtn">
-🚪 Logout
-</button>
-
+<button class="logout" id="logoutBtn">🚪 Logout</button>
 </div>
 
-
-<!-- ================= TUTOR MANAGEMENT ================= -->
-
-<div
-class="card"
-id="tutorManagement"
->
-
+<div class="card hidden" id="tutorManagement">
 <h2>👨‍🏫 Tutor Management</h2>
-
 <label>Tutor Email</label>
-
-<input
-type="email"
-id="tutorEmail"
-placeholder="tutor@example.com"
->
-
-<button
-class="addTutor"
-id="addTutorBtn"
->
-➕ Add Tutor
-</button>
-
+<input type="email" id="tutorEmail" placeholder="tutor@example.com">
+<button class="addTutor" id="addTutorBtn">➕ Add Tutor</button>
 <p id="tutorMessage"></p>
-
 <h3>📋 Approved Tutors</h3>
-
-<div id="tutors">
-লোড হচ্ছে...
+<div id="tutors">লোড হচ্ছে...</div>
 </div>
-
-</div>
-
-
-<!-- ================= ADD POST ================= -->
 
 <div class="card">
-
 <h2>➕ নতুন পোস্ট যোগ করুন</h2>
-
 <label>Class</label>
-
 <select id="className">
-
-<option value="">
-Class নির্বাচন করুন
-</option>
-
-<option>Class 1</option>
-<option>Class 2</option>
-<option>Class 3</option>
-<option>Class 4</option>
-<option>Class 5</option>
-<option>Class 6</option>
-<option>Class 7</option>
-<option>Class 8</option>
-<option>Class 9</option>
-<option>Class 10</option>
-<option>Class 11</option>
-<option>Class 12</option>
-
+<option value="">Class নির্বাচন করুন</option>
+<option>Class 1</option><option>Class 2</option><option>Class 3</option>
+<option>Class 4</option><option>Class 5</option><option>Class 6</option>
+<option>Class 7</option><option>Class 8</option><option>Class 9</option>
+<option>Class 10</option><option>Class 11</option><option>Class 12</option>
 </select>
-
-
-<label>Subject</label>
-
-<input
-type="text"
-id="subject"
-placeholder="বাংলা / ইংরেজি / গণিত"
->
-
-
-<label>Chapter</label>
-
-<input
-type="text"
-id="chapter"
-placeholder="Chapter-এর নাম"
->
-
-
-<label>Title</label>
-
-<input
-type="text"
-id="title"
-placeholder="পোস্টের শিরোনাম"
->
-
-
-<label>Notes</label>
-
-<textarea
-id="notes"
-placeholder="শিক্ষামূলক নোট লিখুন..."
-></textarea>
-
-
-<label>Q&A</label>
-
-<textarea
-id="qa"
-placeholder="প্রশ্ন ও উত্তর লিখুন..."
-></textarea>
-
-
-<label>MCQ</label>
-
-<textarea
-id="mcq"
-placeholder="MCQ প্রশ্ন ও উত্তর লিখুন..."
-></textarea>
-
-
-<label>PDF Link</label>
-
-<input
-type="url"
-id="pdf"
-placeholder="PDF Link"
->
-
-
-<button id="publishBtn">
-🚀 Publish Post
-</button>
-
+<label>Subject</label><input type="text" id="subject" placeholder="বাংলা / ইংরেজি / গণিত">
+<label>Chapter</label><input type="text" id="chapter" placeholder="Chapter-এর নাম">
+<label>Title</label><input type="text" id="title" placeholder="পোস্টের শিরোনাম">
+<label>Notes</label><textarea id="notes" placeholder="শিক্ষামূলক নোট লিখুন..."></textarea>
+<label>Q&A</label><textarea id="qa" placeholder="প্রশ্ন ও উত্তর লিখুন..."></textarea>
+<label>MCQ</label><textarea id="mcq" placeholder="MCQ প্রশ্ন ও উত্তর লিখুন..."></textarea>
+<label>PDF Link</label><input type="url" id="pdf" placeholder="PDF Link">
+<button id="publishBtn">🚀 Publish Post</button>
 <p id="postMessage"></p>
-
 </div>
-
-
-<!-- ================= POSTS ================= -->
 
 <div class="card">
-
-<h2>📚 প্রকাশিত পোস্ট</h2>
-
-<div id="posts">
-লোড হচ্ছে...
+<h2>📝 পোস্টসমূহ</h2>
+<p class="small">Tutor-এর পোস্ট আগে Pending থাকবে। Main Admin Approve করলে তবেই সাধারণ মানুষ ওয়েবসাইটে দেখতে পাবে।</p>
+<div id="posts">লোড হচ্ছে...</div>
 </div>
 
 </div>
-
 </div>
-
-</div>
-
 
 <script type="module">
-
 import { auth, db } from "./firebase.js";
 
 import {
-signInWithEmailAndPassword,
-signOut,
-onAuthStateChanged
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 import {
-collection,
-addDoc,
-getDocs,
-deleteDoc,
-updateDoc,
-doc,
-serverTimestamp
-}
-from
-"https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  setDoc,
+  doc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+const ADMIN_EMAIL = "sanfuisamiullah@gmail.com";
 
-/* =========================
-   MAIN ADMIN
-========================= */
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const message = document.getElementById("message");
+const adminEmail = document.getElementById("adminEmail");
+const userRole = document.getElementById("userRole");
+const tutorManagement = document.getElementById("tutorManagement");
+const tutorEmail = document.getElementById("tutorEmail");
+const addTutorBtn = document.getElementById("addTutorBtn");
+const tutorMessage = document.getElementById("tutorMessage");
+const tutorsDiv = document.getElementById("tutors");
+const publishBtn = document.getElementById("publishBtn");
+const postMessage = document.getElementById("postMessage");
+const postsDiv = document.getElementById("posts");
 
-const ADMIN_EMAIL =
-"sanfuisamiullah@gmail.com";
+let editingPostId = null;
 
+loginBtn.addEventListener("click", async () => {
+  const userEmail = email.value.trim();
+  const userPassword = password.value;
 
-/* =========================
-   ELEMENTS
-========================= */
+  if (!userEmail || !userPassword) {
+    message.textContent = "⚠️ Email এবং Password দিন।";
+    return;
+  }
 
-const loginBox =
-document.getElementById("loginBox");
-
-const dashboard =
-document.getElementById("dashboard");
-
-const email =
-document.getElementById("email");
-
-const password =
-document.getElementById("password");
-
-const loginBtn =
-document.getElementById("loginBtn");
-
-const logoutBtn =
-document.getElementById("logoutBtn");
-
-const message =
-document.getElementById("message");
-
-const adminEmail =
-document.getElementById("adminEmail");
-
-const userRole =
-document.getElementById("userRole");
-
-const tutorManagement =
-document.getElementById("tutorManagement");
-
-const tutorEmail =
-document.getElementById("tutorEmail");
-
-const addTutorBtn =
-document.getElementById("addTutorBtn");
-
-const tutorMessage =
-document.getElementById("tutorMessage");
-
-const tutorsDiv =
-document.getElementById("tutors");
-
-const publishBtn =
-document.getElementById("publishBtn");
-
-const postMessage =
-document.getElementById("postMessage");
-
-const postsDiv =
-document.getElementById("posts");
-
-
-/* =========================
-   LOGIN
-========================= */
-
-loginBtn.addEventListener(
-"click",
-async () => {
-
-const userEmail =
-email.value.trim();
-
-const userPassword =
-password.value;
-
-if(!userEmail || !userPassword){
-
-message.textContent =
-"⚠️ Email এবং Password দিন।";
-
-return;
-}
-
-try{
-
-await signInWithEmailAndPassword(
-auth,
-userEmail,
-userPassword
-);
-
-message.textContent =
-"✅ Login সফল হয়েছে।";
-
-}catch(error){
-
-message.textContent =
-"❌ Login ব্যর্থ: " +
-error.message;
-
-}
-
+  try {
+    await signInWithEmailAndPassword(auth, userEmail, userPassword);
+    message.textContent = "✅ Login সফল হয়েছে।";
+  } catch (error) {
+    message.textContent = "❌ Login ব্যর্থ: " + error.message;
+  }
 });
 
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    loginBox.classList.remove("hidden");
+    dashboard.classList.add("hidden");
+    return;
+  }
 
-/* =========================
-   AUTH STATE
-========================= */
+  loginBox.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  adminEmail.textContent = user.email;
 
-onAuthStateChanged(
-auth,
-async(user)=>{
+  const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-if(!user){
+  if (isAdmin) {
+    userRole.innerHTML = '<span class="adminBadge">👑 Main Admin</span>';
+    tutorManagement.classList.remove("hidden");
+    await loadTutors();
+  } else {
+    userRole.innerHTML = '<span class="tutorBadge">👨‍🏫 Tutor</span>';
+    tutorManagement.classList.add("hidden");
+  }
 
-loginBox.classList.remove("hidden");
-
-dashboard.classList.add("hidden");
-
-return;
-}
-
-
-loginBox.classList.add("hidden");
-
-dashboard.classList.remove("hidden");
-
-adminEmail.textContent =
-user.email;
-
-
-/* ADMIN */
-
-if(
-user.email.toLowerCase() ===
-ADMIN_EMAIL.toLowerCase()
-){
-
-userRole.innerHTML =
-'<span class="adminBadge">👑 Main Admin</span>';
-
-tutorManagement.classList.remove(
-"hidden"
-);
-
-await loadTutors();
-
-}
-
-
-/* TUTOR */
-
-else{
-
-userRole.innerHTML =
-'<span class="tutorBadge">👨‍🏫 Tutor</span>';
-
-tutorManagement.classList.add(
-"hidden"
-);
-
-}
-
-await loadPosts();
-
+  await loadPosts();
 });
 
-
-/* =========================
-   LOGOUT
-========================= */
-
-logoutBtn.addEventListener(
-"click",
-async()=>{
-
-await signOut(auth);
-
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
 });
 
+addTutorBtn.addEventListener("click", async () => {
+  const newTutorEmail = tutorEmail.value.trim().toLowerCase();
 
-/* =========================
-   ADD TUTOR
-========================= */
+  if (!newTutorEmail) {
+    tutorMessage.textContent = "⚠️ Tutor Email দিন।";
+    return;
+  }
 
-addTutorBtn.addEventListener(
-"click",
-async()=>{
+  if (newTutorEmail === ADMIN_EMAIL.toLowerCase()) {
+    tutorMessage.textContent = "⚠️ Main Admin-কে Tutor হিসেবে যোগ করার দরকার নেই।";
+    return;
+  }
 
-const newTutorEmail =
-tutorEmail.value.trim().toLowerCase();
+  try {
+    await setDoc(doc(db, "tutors", newTutorEmail), {
+      email: newTutorEmail,
+      createdAt: serverTimestamp()
+    });
 
-
-if(!newTutorEmail){
-
-tutorMessage.textContent =
-"⚠️ Tutor Email দিন।";
-
-return;
-}
-
-
-if(newTutorEmail ===
-ADMIN_EMAIL.toLowerCase()){
-
-tutorMessage.textContent =
-"⚠️ Main Admin-কে Tutor হিসেবে যোগ করার দরকার নেই।";
-
-return;
-}
-
-
-try{
-
-await addDoc(
-collection(db,"tutors"),
-{
-email:newTutorEmail,
-createdAt:serverTimestamp()
-}
-);
-
-
-tutorEmail.value="";
-
-tutorMessage.textContent =
-"✅ Tutor অনুমোদন করা হয়েছে।";
-
-
-await loadTutors();
-
-}catch(error){
-
-tutorMessage.textContent =
-"❌ Tutor যোগ করা যায়নি: " +
-error.message;
-
-}
-
+    tutorEmail.value = "";
+    tutorMessage.textContent = "✅ Tutor সফলভাবে অনুমোদন করা হয়েছে।";
+    await loadTutors();
+  } catch (error) {
+    tutorMessage.textContent = "❌ Tutor যোগ করা যায়নি: " + error.message;
+  }
 });
 
+async function loadTutors() {
+  tutorsDiv.innerHTML = "লোড হচ্ছে...";
 
-/* =========================
-   LOAD TUTORS
-========================= */
+  try {
+    const snapshot = await getDocs(collection(db, "tutors"));
+    tutorsDiv.innerHTML = "";
 
-async function loadTutors(){
+    if (snapshot.empty) {
+      tutorsDiv.innerHTML = "<p>এখনও কোনো Tutor নেই।</p>";
+      return;
+    }
 
-tutorsDiv.innerHTML =
-"লোড হচ্ছে...";
+    snapshot.forEach((item) => {
+      const data = item.data();
+      const div = document.createElement("div");
+      div.className = "tutor";
 
+      const emailText = document.createElement("span");
+      emailText.textContent = data.email || item.id;
 
-try{
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "🗑️ Remove";
+      deleteButton.style.background = "#d32f2f";
 
-const snapshot =
-await getDocs(
-collection(db,"tutors")
-);
+      deleteButton.addEventListener("click", async () => {
+        if (!confirm("এই Tutor-কে Remove করতে চান?")) return;
 
+        try {
+          await deleteDoc(doc(db, "tutors", item.id));
+          await loadTutors();
+        } catch (error) {
+          alert("Tutor Remove করা যায়নি: " + error.message);
+        }
+      });
 
-tutorsDiv.innerHTML="";
-
-
-if(snapshot.empty){
-
-tutorsDiv.innerHTML =
-"<p>এখনও কোনো Tutor নেই।</p>";
-
-return;
-
+      div.appendChild(emailText);
+      div.appendChild(deleteButton);
+      tutorsDiv.appendChild(div);
+    });
+  } catch (error) {
+    tutorsDiv.innerHTML = "❌ Tutor list লোড করা যায়নি: " + error.message;
+  }
 }
 
+publishBtn.addEventListener("click", async () => {
+  const data = getFormData();
 
-snapshot.forEach(
-(item)=>{
+  if (!data.className || !data.subject || !data.title) {
+    postMessage.textContent = "⚠️ Class, Subject এবং Title অবশ্যই দিতে হবে।";
+    return;
+  }
 
-const data =
-item.data();
+  try {
+    if (editingPostId) {
+      await updateDoc(doc(db, "posts", editingPostId), {
+        ...data,
+        updatedAt: serverTimestamp()
+      });
+      postMessage.textContent = "✅ পোস্ট Update হয়েছে।";
+      editingPostId = null;
+      publishBtn.textContent = "🚀 Publish Post";
+    } else {
+      const isAdmin =
+        auth.currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-const div =
-document.createElement("div");
+      await addDoc(collection(db, "posts"), {
+        ...data,
+        author: auth.currentUser.email,
+        status: isAdmin ? "approved" : "pending",
+        createdAt: serverTimestamp()
+      });
 
-div.className="tutor";
+      postMessage.textContent = isAdmin
+        ? "✅ পোস্ট প্রকাশিত হয়েছে।"
+        : "✅ পোস্ট জমা হয়েছে। Admin Approve করলে ওয়েবসাইটে দেখা যাবে।";
+    }
 
-
-const emailText =
-document.createElement("span");
-
-emailText.textContent =
-data.email || item.id;
-
-
-const deleteButton =
-document.createElement("button");
-
-deleteButton.textContent =
-"🗑️ Remove";
-
-
-deleteButton.addEventListener(
-"click",
-async()=>{
-
-if(
-!confirm(
-"এই Tutor-কে Remove করতে চান?"
-)
-)return;
-
-
-try{
-
-await deleteDoc(
-doc(
-db,
-"tutors",
-item.id
-)
-);
-
-
-await loadTutors();
-
-}catch(error){
-
-alert(
-"Tutor Remove করা যায়নি: " +
-error.message
-);
-
-}
-
+    clearForm();
+    await loadPosts();
+  } catch (error) {
+    postMessage.textContent = "❌ কাজটি করা যায়নি: " + error.message;
+  }
 });
 
-
-div.appendChild(emailText);
-
-div.appendChild(deleteButton);
-
-tutorsDiv.appendChild(div);
-
-});
-
-}catch(error){
-
-tutorsDiv.innerHTML =
-"❌ Tutor list লোড করা যায়নি: " +
-error.message;
-
+function getFormData() {
+  return {
+    className: document.getElementById("className").value,
+    subject: document.getElementById("subject").value.trim(),
+    chapter: document.getElementById("chapter").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    notes: document.getElementById("notes").value.trim(),
+    qa: document.getElementById("qa").value.trim(),
+    mcq: document.getElementById("mcq").value.trim(),
+    pdf: document.getElementById("pdf").value.trim()
+  };
 }
 
+function clearForm() {
+  ["className","subject","chapter","title","notes","qa","mcq","pdf"]
+    .forEach(id => document.getElementById(id).value = "");
+  editingPostId = null;
+  publishBtn.textContent = "🚀 Publish Post";
 }
 
+async function loadPosts() {
+  postsDiv.innerHTML = "লোড হচ্ছে...";
 
-/* =========================
-   PUBLISH POST
-========================= */
+  try {
+    const snapshot = await getDocs(collection(db, "posts"));
+    postsDiv.innerHTML = "";
 
-publishBtn.addEventListener(
-"click",
-async()=>{
+    if (snapshot.empty) {
+      postsDiv.innerHTML = "<p>এখনও কোনো পোস্ট নেই।</p>";
+      return;
+    }
 
-const className =
-document.getElementById(
-"className"
-).value;
+    snapshot.forEach((item) => {
+      const data = item.data();
+      const post = document.createElement("div");
+      post.className = "post";
 
-const subject =
-document.getElementById(
-"subject"
-).value.trim();
+      const title = document.createElement("h3");
+      title.textContent = data.title || "";
 
-const chapter =
-document.getElementById(
-"chapter"
-).value.trim();
+      const status = document.createElement("p");
+      status.innerHTML = data.status === "approved"
+        ? '<span class="approvedBadge">✅ Approved / Published</span>'
+        : '<span class="pendingBadge">⏳ Pending Approval</span>';
 
-const title =
-document.getElementById(
-"title"
-).value.trim();
+      const info = document.createElement("p");
+      info.innerHTML =
+        "<b>Class:</b> " + escapeHtml(data.className || "") +
+        "<br><b>Subject:</b> " + escapeHtml(data.subject || "") +
+        "<br><b>Chapter:</b> " + escapeHtml(data.chapter || "") +
+        "<br><b>Author:</b> " + escapeHtml(data.author || "");
 
-const notes =
-document.getElementById(
-"notes"
-).value.trim();
+      post.appendChild(title);
+      post.appendChild(status);
+      post.appendChild(info);
 
-const qa =
-document.getElementById(
-"qa"
-).value.trim();
+      if (data.notes) addTextSection(post, "Notes", data.notes);
+      if (data.qa) addTextSection(post, "Q&A", data.qa);
+      if (data.mcq) addTextSection(post, "MCQ", data.mcq);
 
-const mcq =
-document.getElementById(
-"mcq"
-).value.trim();
+      if (data.pdf) {
+        const pdf = document.createElement("p");
+        pdf.innerHTML = '<b>PDF:</b> <a href="' + escapeHtml(data.pdf) +
+          '" target="_blank" rel="noopener">📄 PDF দেখুন</a>';
+        post.appendChild(pdf);
+      }
 
-const pdf =
-document.getElementById(
-"pdf"
-).value.trim();
+      const actions = document.createElement("div");
+      actions.className = "postActions";
 
+      const isAdmin =
+        auth.currentUser &&
+        auth.currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-if(
-!className ||
-!subject ||
-!title
-){
+      if (isAdmin && data.status !== "approved") {
+        const approveButton = document.createElement("button");
+        approveButton.className = "approve";
+        approveButton.textContent = "✅ Approve";
+        approveButton.addEventListener("click", async () => {
+          try {
+            await updateDoc(doc(db, "posts", item.id), {
+              status: "approved",
+              approvedBy: auth.currentUser.email,
+              approvedAt: serverTimestamp()
+            });
+            await loadPosts();
+          } catch (error) {
+            alert("Approve করা যায়নি: " + error.message);
+          }
+        });
+        actions.appendChild(approveButton);
+      }
 
-postMessage.textContent =
-"⚠️ Class, Subject এবং Title অবশ্যই দিতে হবে।";
+      if (isAdmin || data.author === auth.currentUser?.email) {
+        const editButton = document.createElement("button");
+        editButton.className = "edit";
+        editButton.textContent = "✏️ Edit";
+        editButton.addEventListener("click", () => {
+          fillForm(data);
+          editingPostId = item.id;
+          publishBtn.textContent = "💾 Update Post";
+          window.scrollTo({top:0, behavior:"smooth"});
+        });
+        actions.appendChild(editButton);
+      }
 
-return;
+      if (isAdmin) {
+        const rejectButton = document.createElement("button");
+        rejectButton.className = "reject";
+        rejectButton.textContent = "❌ Delete";
+        rejectButton.addEventListener("click", async () => {
+          if (!confirm("এই পোস্টটি Delete করতে চান?")) return;
+          try {
+            await deleteDoc(doc(db, "posts", item.id));
+            await loadPosts();
+          } catch (error) {
+            alert("Delete করা যায়নি: " + error.message);
+          }
+        });
+        actions.appendChild(rejectButton);
+      }
 
+      if (actions.children.length) post.appendChild(actions);
+      postsDiv.appendChild(post);
+    });
+  } catch (error) {
+    postsDiv.innerHTML = "❌ পোস্ট লোড করা যায়নি: " + error.message;
+  }
 }
 
-
-try{
-
-await addDoc(
-collection(db,"posts"),
-{
-
-className,
-subject,
-chapter,
-title,
-notes,
-qa,
-mcq,
-pdf,
-
-author:
-auth.currentUser.email,
-
-createdAt:
-serverTimestamp()
-
-}
-);
-
-
-postMessage.textContent =
-"✅ পোস্ট সফলভাবে Publish হয়েছে।";
-
-
-clearForm();
-
-await loadPosts();
-
-
-}catch(error){
-
-postMessage.textContent =
-"❌ Publish করা যায়নি: " +
-error.message;
-
+function fillForm(data) {
+  document.getElementById("className").value = data.className || "";
+  document.getElementById("subject").value = data.subject || "";
+  document.getElementById("chapter").value = data.chapter || "";
+  document.getElementById("title").value = data.title || "";
+  document.getElementById("notes").value = data.notes || "";
+  document.getElementById("qa").value = data.qa || "";
+  document.getElementById("mcq").value = data.mcq || "";
+  document.getElementById("pdf").value = data.pdf || "";
 }
 
-});
-
-
-/* =========================
-   CLEAR FORM
-========================= */
-
-function clearForm(){
-
-document.getElementById(
-"className"
-).value="";
-
-document.getElementById(
-"subject"
-).value="";
-
-document.getElementById(
-"chapter"
-).value="";
-
-document.getElementById(
-"title"
-).value="";
-
-document.getElementById(
-"notes"
-).value="";
-
-document.getElementById(
-"qa"
-).value="";
-
-document.getElementById(
-"mcq"
-).value="";
-
-document.getElementById(
-"pdf"
-).value="";
-
+function addTextSection(parent, label, text) {
+  const p = document.createElement("p");
+  p.innerHTML = "<b>" + label + ":</b><br>" +
+    escapeHtml(text).replace(/\n/g, "<br>");
+  parent.appendChild(p);
 }
 
-
-/* =========================
-   LOAD POSTS
-========================= */
-
-async function loadPosts(){
-
-postsDiv.innerHTML =
-"লোড হচ্ছে...";
-
-
-try{
-
-const snapshot =
-await getDocs(
-collection(db,"posts")
-);
-
-
-postsDiv.innerHTML="";
-
-
-if(snapshot.empty){
-
-postsDiv.innerHTML =
-"<p>এখনও কোনো পোস্ট নেই।</p>";
-
-return;
-
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = String(text);
+  return div.innerHTML;
 }
-
-
-snapshot.forEach(
-(item)=>{
-
-const data =
-item.data();
-
-const post =
-document.createElement("div");
-
-post.className="post";
-
-
-const title =
-document.createElement("h3");
-
-title.textContent =
-data.title || "";
-
-
-const info =
-document.createElement("p");
-
-info.innerHTML =
-"<b>Class:</b> " +
-escapeHtml(data.className || "") +
-"<br><b>Subject:</b> " +
-escapeHtml(data.subject || "") +
-"<br><b>Chapter:</b> " +
-escapeHtml(data.chapter || "");
-
-
-const notes =
-document.createElement("p");
-
-notes.innerHTML =
-"<b>Notes:</b><br>" +
-escapeHtml(
-data.notes || ""
-).replace(/\n/g,"<br>");
-
-
-const qa =
-document.createElement("p");
-
-qa.innerHTML =
-"<b>Q&A:</b><br>" +
-escapeHtml(
-data.qa || ""
-).replace(/\n/g,"<br>");
-
-
-const mcq =
-document.createElement("p");
-
-mcq.innerHTML =
-"<b>MCQ:</b><br>" +
-escapeHtml(
-data.mcq || ""
-).replace(/\n/g,"<br>");
-
-
-post.appendChild(title);
-
-post.appendChild(info);
-
-post.appendChild(notes);
-
-post.appendChild(qa);
-
-post.appendChild(mcq);
-
-
-if(data.pdf){
-
-const pdf =
-document.createElement("p");
-
-pdf.innerHTML =
-'<b>PDF:</b> ' +
-'<a href="' +
-escapeHtml(data.pdf) +
-'" target="_blank">' +
-'📄 PDF দেখুন</a>';
-
-post.appendChild(pdf);
-
-}
-
-
-if(data.author){
-
-const author =
-document.createElement("p");
-
-author.innerHTML =
-"<small>✍️ Published by: " +
-escapeHtml(data.author) +
-"</small>";
-
-post.appendChild(author);
-
-}
-
-
-/* DELETE */
-
-const deleteButton =
-document.createElement("button");
-
-deleteButton.className="delete";
-
-deleteButton.textContent =
-"🗑️ Delete";
-
-
-deleteButton.addEventListener(
-"click",
-async()=>{
-
-if(
-!confirm(
-"এই পোস্টটি Delete করতে চান?"
-)
-)return;
-
-
-try{
-
-await deleteDoc(
-doc(
-db,
-"posts",
-item.id
-)
-);
-
-await loadPosts();
-
-}catch(error){
-
-alert(
-"Delete করা যায়নি: " +
-error.message
-);
-
-}
-
-});
-
-
-post.appendChild(
-deleteButton
-);
-
-
-/* EDIT */
-
-const editButton =
-document.createElement("button");
-
-editButton.className="edit";
-
-editButton.textContent =
-"✏️ Edit";
-
-
-editButton.addEventListener(
-"click",
-()=>{
-
-document.getElementById(
-"className"
-).value =
-data.className || "";
-
-document.getElementById(
-"subject"
-).value =
-data.subject || "";
-
-document.getElementById(
-"chapter"
-).value =
-data.chapter || "";
-
-document.getElementById(
-"title"
-).value =
-data.title || "";
-
-document.getElementById(
-"notes"
-).value =
-data.notes || "";
-
-document.getElementById(
-"qa"
-).value =
-data.qa || "";
-
-document.getElementById(
-"mcq"
-).value =
-data.mcq || "";
-
-document.getElementById(
-"pdf"
-).value =
-data.pdf || "";
-
-
-publishBtn.textContent =
-"💾 Update Post";
-
-
-publishBtn.onclick =
-async()=>{
-
-try{
-
-await updateDoc(
-doc(
-db,
-"posts",
-item.id
-),
-{
-
-className:
-document.getElementById(
-"className"
-).value,
-
-subject:
-document.getElementById(
-"subject"
-).value.trim(),
-
-chapter:
-document.getElementById(
-"chapter"
-).value.trim(),
-
-title:
-document.getElementById(
-"title"
-).value.trim(),
-
-notes:
-document.getElementById(
-"notes"
-).value.trim(),
-
-qa:
-document.getElementById(
-"qa"
-).value.trim(),
-
-mcq:
-document.getElementById(
-"mcq"
-).value.trim(),
-
-pdf:
-document.getElementById(
-"pdf"
-).value.trim(),
-
-updatedAt:
-serverTimestamp()
-
-}
-);
-
-
-postMessage.textContent =
-"✅ পোস্ট Update হয়েছে।";
-
-publishBtn.textContent =
-"🚀 Publish Post";
-
-clearForm();
-
-await loadPosts();
-
-}catch(error){
-
-postMessage.textContent =
-"❌ Update করা যায়নি: " +
-error.message;
-
-}
-
-};
-
-});
-
-
-post.appendChild(
-editButton
-);
-
-
-postsDiv.appendChild(post);
-
-});
-
-
-}catch(error){
-
-postsDiv.innerHTML =
-"❌ পোস্ট লোড করা যায়নি: " +
-error.message;
-
-}
-
-}
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHtml(text){
-
-const div =
-document.createElement("div");
-
-div.textContent =
-text;
-
-return div.innerHTML;
-
-}
-
 </script>
-
 </body>
-  </html
+</html>
